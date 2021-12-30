@@ -1,0 +1,9 @@
+﻿  Graph_revised.cpp
+D:\DataStructureLearning\project_code\Practice_DataStructure\Graph_revised\Graph_revised\Graph_revised\C_Graph.h(156,20): warning C4101: 'e': unreferenced local variable
+D:\DataStructureLearning\project_code\Practice_DataStructure\Graph_revised\Graph_revised\Graph_revised\C_Graph.h(150): message : while compiling class template member function 'bool UnDiGraph<int>::visited_reset(void)'
+D:\DataStructureLearning\project_code\Practice_DataStructure\Graph_revised\Graph_revised\Graph_revised\Graph_revised.cpp(30): message : see reference to function template instantiation 'bool UnDiGraph<int>::visited_reset(void)' being compiled
+D:\DataStructureLearning\project_code\Practice_DataStructure\Graph_revised\Graph_revised\Graph_revised\Graph_revised.cpp(10): message : see reference to class template instantiation 'UnDiGraph<int>' being compiled
+D:\DataStructureLearning\project_code\Practice_DataStructure\Graph_revised\Graph_revised\Graph_revised\C_Graph.h(171,20): warning C4101: 'e': unreferenced local variable
+D:\DataStructureLearning\project_code\Practice_DataStructure\Graph_revised\Graph_revised\Graph_revised\C_Graph.h(165): message : while compiling class template member function 'bool UnDiGraph<int>::predecessor_reset(void)'
+D:\DataStructureLearning\project_code\Practice_DataStructure\Graph_revised\Graph_revised\Graph_revised\Graph_revised.cpp(30): message : see reference to function template instantiation 'bool UnDiGraph<int>::predecessor_reset(void)' being compiled
+  Graph_revised.vcxproj -> D:\DataStructureLearning\project_code\Practice_DataStructure\Graph_revised\Graph_revised\Debug\Graph_revised.exe

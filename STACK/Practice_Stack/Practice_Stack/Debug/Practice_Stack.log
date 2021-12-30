@@ -1,0 +1,4 @@
+﻿  Practice_Stack.cpp
+D:\DataStructureLearning\project_code\Practice_DataStructure\STACK\Practice_Stack\Practice_Stack\C_MyStack.h(96): warning C4715: 'C_MyStack<int>::Insert': not all control paths return a value
+D:\DataStructureLearning\project_code\Practice_DataStructure\STACK\Practice_Stack\Practice_Stack\C_MyStack.h(120): warning C4715: 'C_MyStack<int>::Delete': not all control paths return a value
+  Practice_Stack.vcxproj -> D:\DataStructureLearning\project_code\Practice_DataStructure\STACK\Practice_Stack\Debug\Practice_Stack.exe
