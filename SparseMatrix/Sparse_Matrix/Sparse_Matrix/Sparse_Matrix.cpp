@@ -18,8 +18,15 @@ int main()
     }
     cout << "Before Transpose...\n";
     M1.ShowAll();
+    
+    cout << "---\n";
     cout << "After Transpose...\n";
     M1.ShowAll(M1.Transpose());
+    
+    cout << "---\n";
+    cout << "After Fast Transpose...\n";
+    M1.ShowAll(M1.Fast_Transpose());
+
     return 0;
 }
 

@@ -30,6 +30,7 @@ public:
 	//SparseMatrix Add(SparseMatrix* b);
 	//SparseMatrix Multiply(SparseMatrix* b);
 	data_row<T>* Transpose();
+	data_row<T>* Fast_Transpose();
 
 };
 
@@ -126,6 +127,37 @@ inline data_row<T>* SparseMatrix<T>::Transpose() {
 			}
 		}
 	}
+
+	return Transpose;
+}
+
+template<class T>
+inline data_row<T>* SparseMatrix<T>::Fast_Transpose()
+{
+	data_row<T>* Transpose = new data_row<T>[terms];
+	int* rowSize = new int[col_num];
+	int* rowStart = new int[col_num];
+	
+	memset(rowSize, 0, col_num*sizeof(int));//initialize
+	for (int i = 0; i < terms; i++)
+		rowSize[elements[i].col]++;
+
+	rowStart[0] = 0;
+	for (int i = 1; i < col_num; i++) {
+		rowStart[i] = rowStart[i - 1] + rowSize[i - 1];
+	}
+
+	int j;
+	for (int i = 0; i < terms; i++) {
+		j = elements[i].col;
+		Transpose[rowStart[j]].col = elements[i].row;
+		Transpose[rowStart[j]].row = elements[i].col;
+		Transpose[rowStart[j]].value = elements[i].value;
+		rowStart[j]++;
+	}
+
+	delete[] rowSize;
+	delete[] rowStart;
 
 	return Transpose;
 }
