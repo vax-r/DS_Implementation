@@ -28,7 +28,7 @@ public:
 	void ExpandSize();
 	//void Delete(int& row,int& col);
 	//SparseMatrix Add(SparseMatrix* b);
-	//SparseMatrix Multiply(SparseMatrix* b);
+	SparseMatrix<T>* Multiply(SparseMatrix* b);
 	data_row<T>* Transpose();
 	data_row<T>* Fast_Transpose();
 
@@ -78,10 +78,15 @@ inline void SparseMatrix<T>::ShowAll(data_row<T>* list) {
 
 template <class T>
 inline void SparseMatrix<T>::ExpandSize() {
+	if (capacity + 10 > Max_capacity) {
+		cout << "exceeed max capacity!\n";
+		return;
+	}
 	data_row<T>* new_elements = new data_row<T>[capacity + 10];
-	memcpy(new_elements, this->elements, capacity);
+	memcpy(new_elements, this->elements, terms*sizeof(data_row<T>));
 	delete[] this->elements;
 	this->elements = new_elements;
+	capacity += 10;
 }
 
 template <class T>
@@ -110,6 +115,8 @@ inline void SparseMatrix<T>::Insert(int& row, int& col, T& value) {
 	elements[terms++].value = value;
 
 }
+
+
 
 template <class T>
 inline data_row<T>* SparseMatrix<T>::Transpose() {
@@ -160,4 +167,66 @@ inline data_row<T>* SparseMatrix<T>::Fast_Transpose()
 	delete[] rowStart;
 
 	return Transpose;
+}
+
+template<class T>
+inline SparseMatrix<T>* SparseMatrix<T>::Multiply(SparseMatrix* b)
+{	
+
+	if (this->col_num != b->row_num) {
+		cout << "Matrix size are imcompatible!\n";
+		return nullptr;
+	}
+
+	SparseMatrix<T>* d = new SparseMatrix<T>(this->row_num,b->col_num);
+	int curAindex, curBindex, curArow, curBcol,Astart,Bstart;
+	data_row<T>* bT = b->Fast_Transpose();
+	curAindex = 0; curArow = this->elements[0].row;
+	Astart = 0;
+	int product = 0;
+
+	while (curAindex < terms) {
+		curBindex = 0;
+		curBcol = bT[curBindex].row;
+
+
+		while (curBindex < b->terms) {
+			if (this->elements[curAindex].row != curArow) {
+				if(product!=0)
+					d->Insert(curArow, curBcol, product);
+				product = 0;
+				curAindex = Astart;
+				while (bT[curBindex].row == curBcol)
+					curBindex++;
+				curBcol = bT[curBindex].row;
+			}
+			else if (bT[curBindex].row != curBcol) {
+				if(product!=0)
+					d->Insert(curArow, curBcol, product);
+				product = 0;
+				curAindex = Astart;
+				curBcol = bT[curBindex].row;
+			}
+			else {
+				if (this->elements[curAindex].col < bT[curBindex].col)
+					curAindex++;
+				else if (this->elements[curAindex].col > bT[curBindex].col)
+					curBindex++;
+				else {
+					product += (this->elements[curAindex].value * bT[curBindex].value);
+					curAindex++;
+					curBindex++;
+				}
+			}
+		}
+
+		while (this->elements[curAindex].row == curArow)
+			curAindex++;
+		Astart = curAindex;
+		curArow = this->elements[curAindex].row;
+
+
+	}
+
+	return d;
 }

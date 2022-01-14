@@ -10,11 +10,13 @@ int main()
 {   
     int row_size = 6, col_size = 6;
     SparseMatrix<int> M1(row_size,col_size);
+    SparseMatrix<int> M2(row_size, col_size);
 
     int row[8] = { 0,0,0,1,1,2,4,5 }, col[8] = { 0,3,5,1,2,3,0,2 }, val[8] = {15,22,-15,11,3,-6,91,28};
     
     for (int i = 0; i < 8; i++) {
         M1.Insert(row[i], col[i], val[i]);
+        M2.Insert(row[i], col[i], val[i]);
     }
     cout << "Before Transpose...\n";
     M1.ShowAll();
@@ -26,6 +28,15 @@ int main()
     cout << "---\n";
     cout << "After Fast Transpose...\n";
     M1.ShowAll(M1.Fast_Transpose());
+
+    SparseMatrix<int>* Product;
+    cout << "---\n";
+    cout << "Multiply...\n";
+    Product=M1.Multiply(&M2);
+    if (Product != nullptr)
+        Product->ShowAll();
+    else
+        cout << "Fail to multiply\n";
 
     return 0;
 }
