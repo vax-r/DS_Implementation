@@ -38,6 +38,15 @@ int main()
     else
         cout << "Fail to multiply\n";
 
+    cout << "---\n";
+    cout << "Add...\n";
+    SparseMatrix<int>* Sum;
+    Sum = M1.Add(&M2);
+    if (Sum != nullptr)
+        Sum->ShowAll();
+    else
+        cout << "Fail to add!\n";
+
     return 0;
 }
 

@@ -27,7 +27,7 @@ public:
 	void Insert(int& row,int& col,T& value);
 	void ExpandSize();
 	//void Delete(int& row,int& col);
-	//SparseMatrix Add(SparseMatrix* b);
+	SparseMatrix<T>* Add(SparseMatrix* b);
 	SparseMatrix<T>* Multiply(SparseMatrix* b);
 	data_row<T>* Transpose();
 	data_row<T>* Fast_Transpose();
@@ -167,6 +167,68 @@ inline data_row<T>* SparseMatrix<T>::Fast_Transpose()
 	delete[] rowStart;
 
 	return Transpose;
+}
+
+template<class T>
+inline SparseMatrix<T>* SparseMatrix<T>::Add(SparseMatrix* b)
+{	
+	if (this->row_num != b->row_num || this->col_num != b->col_num) {
+		cout << "Matrix size are imcompatible!\n";
+		return nullptr;
+	}
+
+	SparseMatrix<T>* sum_Matrix = new SparseMatrix<T>(this->row_num, this->col_num);
+	
+	int curRow, curCol, curAindex, curBindex, max_row, max_col,sum;
+	max_row = this->row_num > b->row_num ? this->row_num : b->row_num;
+	max_col = this->col_num > b->col_num ? this->col_num : b->col_num;
+	curAindex = 0; curBindex = 0;
+	
+	while (curAindex < this->terms && curBindex < b->terms) {
+		sum = 0;
+
+		if (this->elements[curAindex].row == b->elements[curBindex].row) {
+			curRow = this->elements[curAindex].row;
+			if (this->elements[curAindex].col == b->elements[curBindex].col) {
+				curCol = this->elements[curAindex].col;
+				sum = this->elements[curAindex].value + b->elements[curBindex].value;
+				sum_Matrix->Insert(curRow, curCol, sum);
+				curAindex++; curBindex++;
+			}
+			else {
+				curCol = this->elements[curAindex].col < b->elements[curBindex].col ? this->elements[curAindex].col : b->elements[curBindex].col;
+				sum = this->elements[curAindex].col < b->elements[curBindex].col ? this->elements[curAindex].value : b->elements[curBindex].value;
+				sum_Matrix->Insert(curRow, curCol, sum);
+				this->elements[curAindex].col < b->elements[curBindex].col ? curAindex++ : curBindex++;
+			}
+		}
+		else {
+			curRow = this->elements[curAindex].row < b->elements[curBindex].row ? this->elements[curAindex].row : b->elements[curBindex].row;
+			curCol = this->elements[curAindex].row < b->elements[curBindex].row ? this->elements[curAindex].col : b->elements[curBindex].col;
+			sum = this->elements[curAindex].row < b->elements[curBindex].row ? this->elements[curAindex].value : b->elements[curBindex].value;
+			sum_Matrix->Insert(curRow, curCol, sum);
+			this->elements[curAindex].row < b->elements[curBindex].row ? curAindex++ : curBindex++;
+		}
+	}
+
+	while (curAindex < this->terms) {
+		curRow = this->elements[curAindex].row;
+		curCol = this->elements[curAindex].col;
+		sum = this->elements[curAindex].value;
+		sum_Matrix->Insert(curRow, curCol, sum);
+		curAindex++;
+	}
+
+	while (curBindex < b->terms) {
+		curRow = b->elements[curBindex].row;
+		curCol = b->elements[curBindex].col;
+		sum = this->elements[curBindex].value;
+		sum_Matrix->Insert(curRow, curCol, sum);
+		curBindex++;
+	}
+
+	return sum_Matrix;
+
 }
 
 template<class T>
