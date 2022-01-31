@@ -181,7 +181,8 @@ inline bool Expression::infix2prefix() {
         prefix_str.pop();
     }
 
-    
+    isp.erase(isp.find("("));
+    icp.erase(icp.find("("));
 
     if (infix_expression.length() != prefix_expression.length())
         return false;
